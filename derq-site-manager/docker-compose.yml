@@ -1,0 +1,45 @@
+version: '3'
+services:
+  ad-manager:
+    restart: always
+    build: .
+    container_name: ad-manager
+    ports:
+      - 80:3000
+    links:
+      - mongodb
+    volumes:
+      - ./:/code
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    environment:
+      - PUID=1000
+      - PGID=1000
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+  sms-daemon:
+    restart: always
+    build: ../ad-manager-sms-scheduler
+    container_name: sms-daemon
+    ports:
+      - 82:3002
+    links:
+      - mongodb
+    volumes:
+      - ../ad-manager-sms-scheduler/:/code
+  cleanup-daemon:
+    restart: always
+    build: ../ad-manager-db-cleanup
+    container_name: cleanup-daemon
+    ports:
+      - 81:3001
+    links:
+      - mongodb
+    volumes:
+      - ../ad-manager-db-cleanup/:/code
+volumes:
+ mongodb:
+  name: mongodb

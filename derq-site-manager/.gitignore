@@ -1,0 +1,9 @@
+# macOS Files
+.DS_Store
+
+#node_modules
+./node_modules/**
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
